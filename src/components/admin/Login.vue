@@ -49,9 +49,22 @@ export default {
       this.code = data.data.code;
   },
   methods: {
-    login() {
+    async login() {
       let option = { username: this.username, password: this.password,code:this.upCode };
-      adminLogin(option);
+      let data = await adminLogin(option);
+
+      if(data.data.error == 0){
+          alert("登录成功,1s秒后跳转到后台页面");
+          setTimeout(()=>{
+              alert("跳转");
+          },1000);
+      }else if(data.data.error == 1){
+          alert("用户名或密码错误");
+      }else{
+          alert("验证码错误");
+          this.upCode = "";
+      }
+      this.code = data.data.error != 0 ? data.data.code : this.code;
     },
     async changeCode(){
       let data = await getCode();

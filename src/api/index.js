@@ -7,7 +7,7 @@ export function search(option){
 }
 
 export function adminLogin(option){
-    axios.post('/api/adminLogin',{
+    return axios.post('/api/adminLogin',{
         username:option.username,
         password:option.password,
         code:option.code
