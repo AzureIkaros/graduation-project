@@ -7,10 +7,11 @@ Vue.config.productionTip = false
 
 
 import 'element-ui/lib/theme-chalk/index.css';
-import { Button,Input } from 'element-ui';
+import { Button,Input,Image } from 'element-ui';
 
 Vue.use(Button);
 Vue.use(Input);
+Vue.use(Image);
 
 new Vue({
   router,

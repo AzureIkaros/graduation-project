@@ -1,23 +1,39 @@
 <template>
   <div class="main">
-    <img src="img/search.png" alt="" />
+    <a href="http://localhost:8080/" style="background: url(img/search.png) no-repeat;"></a>
     <section class="search-box">
-      <el-input v-model="input" placeholder="请输入搜索内容"></el-input>
-      <el-button type="primary">搜索</el-button>
+      <el-input v-model="inputData" placeholder="请输入搜索内容"></el-input>
+      <el-button type="primary" icon="el-icon-search" @click="submit">搜索</el-button>
     </section>
   </div>
 </template>
 
 <script>
-export default {};
+import { search } from "../api"
+export default {
+    data(){
+        return {
+            inputData:""
+        }
+    },
+    methods: {
+        submit(){
+            let option = {  inputData:this.inputData };
+            search(option);
+        }
+    },
+};
 </script>
 
 <style lang="scss" scoped>
 .main {
   width: 1200px;
   margin: 160px auto;
-  img{
-      margin-bottom: 30px;
+  a{
+      display: block;
+      width: 473px;
+      height: 100px;
+      margin: 20px auto;
   }
   .search-box {
     width: 600px;
