@@ -56,7 +56,7 @@ export default {
       if(data.data.error == 0){
           alert("登录成功,1s秒后跳转到后台页面");
           setTimeout(()=>{
-              alert("跳转");
+              this.$router.push({path:'/admin/oTable'})
           },1000);
       }else if(data.data.error == 1){
           alert("用户名或密码错误");

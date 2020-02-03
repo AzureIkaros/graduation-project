@@ -15,6 +15,25 @@ const adminChild = [
   }
 ]
 
+const adminOption = [
+    {
+        path:"/admin/console",
+        name:"console",
+        components:{
+            "header":()=>import("../components/admin/Header"),
+            "tab":()=>import("../components/admin/Tab"),
+        },
+        children:[
+            {
+                path:"/admin/console/forgetPassword",
+                name:"forgetPassword",
+                component:()=>import("../components/admin/show/ForgetPassword")
+            }
+        ]
+    }
+]
+
+
 const routes = [
   {
     path:'/',
@@ -30,6 +49,13 @@ const routes = [
     component:()=>import("../views/Admin"),
     redirect:{name:'login'},
     children:adminChild
+  },
+  {
+    path:"/admin/oTable",
+    name:"option",
+    component:()=>import("../views/AdminOption"),
+    redirect:{name:'console'},
+    children:adminOption
   }
 ]
 
