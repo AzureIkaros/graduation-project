@@ -17,3 +17,11 @@ export function adminLogin(option){
 export function getCode(){
     return axios.get('/api/getCode');
 }
+
+export function pushPassWD(option){
+    return axios.post('/api/pushPassWD',{
+        username:option.username,
+        oldPassWd:option.oldPassWd,
+        newPassWd:option.newPassWd
+    })
+}

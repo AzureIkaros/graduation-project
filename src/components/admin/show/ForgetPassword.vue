@@ -1,26 +1,27 @@
 <template>
   <div id="box">
-    <el-input v-model="oldPassWd" placeholder="请输入原密码"></el-input>
+    <el-input v-model="oldPassWd" placeholder="请输入原密码" type="password"></el-input>
     <p>{{ tipOne }}</p>
 
-    <el-input v-model="newPassWdFir" placeholder="请输入新密码"></el-input>
+    <el-input v-model="newPassWdFir" placeholder="请输入新密码" @input="getFlagOne" type="password"></el-input>
     <p>{{ getTipOne() }}</p>
 
-    <el-input v-model="newPassWdSec" placeholder="请再次输入新密码" @input="getFlagTwo"></el-input>
+    <el-input v-model="newPassWdSec" placeholder="请再次输入新密码" @input="getFlagTwo" type="password"></el-input>
     <p>{{ getTipTwo() }}</p>
 
-    <el-button type="primary" :disabled="getFlag">修改密码</el-button>
+    <el-button type="primary" :disabled="getFlag" @click="pushPW">修改密码</el-button>
   </div>
 </template>
 
 <script>
+import { pushPassWD } from "../../../api";
 export default {
   data() {
     return {
       oldPassWd: "",
       newPassWdFir: "",
       newPassWdSec: "",
-      tipThree: "",
+      tipOne: "",
       flagOne: true,
       flagTwo: true
     };
@@ -82,6 +83,25 @@ export default {
       this.newPassWdFir.length >= 12
         ? (this.flagOne = false)
         : (this.flagOne = true);
+    },
+    async pushPW(){
+        let option = {
+            username:sessionStorage.getItem("username"),
+            oldPassWd:this.oldPassWd,
+            newPassWd:this.newPassWdSec
+        };
+        if(confirm("是否确定修改密码")){
+            let result = await pushPassWD(option);
+            if(result.data.error == 0){
+                alert("修改成功");
+            }else if(result.data.error == 1){
+                alert("原密码错误");
+            }else if(result.data.error == 2){
+                alert("密码修改失败,请联系管理员");
+            }else{
+                alert("其他错误,请联系管理员");
+            }
+        }
     }
   }
 };

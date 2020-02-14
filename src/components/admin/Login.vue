@@ -36,37 +36,45 @@ export default {
       username: "",
       password: "",
       code: "",
-      upCode:""
+      upCode: ""
     };
   },
   computed: {
-      canUseButton(){
-          return !(this.username.length != 0 && this.password.length != 0 && this.upCode.length != 0);
-      }
+    canUseButton() {
+      return !(
+        this.username.length != 0 &&
+        this.password.length != 0 &&
+        this.upCode.length != 0
+      );
+    }
   },
   async mounted() {
-      let data = await getCode();
-      this.code = data.data.code;
+    let data = await getCode();
+    this.code = data.data.code;
   },
   methods: {
     async login() {
-      let option = { username: this.username, password: this.password,code:this.upCode };
+      let option = {
+        username: this.username,
+        password: this.password,
+        code: this.upCode
+      };
       let data = await adminLogin(option);
-
-      if(data.data.error == 0){
-          alert("登录成功,1s秒后跳转到后台页面");
-          setTimeout(()=>{
-              this.$router.push({path:'/admin/oTable'})
-          },1000);
-      }else if(data.data.error == 1){
-          alert("用户名或密码错误");
-      }else{
-          alert("验证码错误");
-          this.upCode = "";
+      if (data.data.error == 0) {
+        sessionStorage.setItem("username",this.username);
+        alert("登录成功,1s秒后跳转到后台页面");
+        setTimeout(() => {
+          this.$router.push({ path: "/admin/oTable" });
+        }, 1000);
+      } else if (data.data.error == 1) {
+        alert("用户名或密码错误");
+      } else {
+        alert("验证码错误");
+        this.upCode = "";
       }
       this.code = data.data.error != 0 ? data.data.code : this.code;
     },
-    async changeCode(){
+    async changeCode() {
       let data = await getCode();
       this.code = data.data.code;
     }
