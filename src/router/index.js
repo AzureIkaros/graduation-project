@@ -23,11 +23,17 @@ const adminOption = [
             "header":()=>import("../components/admin/Header"),
             "tab":()=>import("../components/admin/Tab"),
         },
+        redirect:{name:"spider"},
         children:[
             {
                 path:"/admin/console/forgetPassword",
                 name:"forgetPassword",
                 component:()=>import("../components/admin/show/ForgetPassword")
+            },
+            {
+                path:"/admin/console/spider",
+                name:"spider",
+                component:()=>import("../components/admin/show/Spider")
             }
         ]
     }
