@@ -18,6 +18,9 @@ export default {
     },
     methods: {
         submit(){
+            if(this.inputData == ""){
+                return;
+            }
             let option = {  inputData:this.inputData };
             search(option);
         }

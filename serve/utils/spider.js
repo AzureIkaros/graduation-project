@@ -1,4 +1,6 @@
 const connection = require("../utils/mysql");
+const https = require("https");
+const http = require("http");
 const { dealHttpUrl,dealHttpsUrl } = require("./dealSpider");
 
 const spider = {
@@ -31,9 +33,9 @@ const spider = {
                             error: 2
                         })
                     } else {
-                        connection.query(`create table ${info.table_name}(id int primary key auto_increment,url varchar(1000),title varchar(256),clickNum int)`, (error, result) => {
+                        connection.query(`create table ${info.table_name}(id int primary key auto_increment,url varchar(1000),title varchar(256),clickNum int,table_name varchar(256),text longtext,fulltext index full_text(text) with parser ngram)`, (error, result) => {
                             if (error) {
-                                console.log(error)
+                                console.log("createTable:" + error)
                                 res.json({
                                     status: 0,
                                     error: 2
@@ -94,7 +96,7 @@ const spider = {
         this.end_flag = true;
         this.radio_flag = false;
         this.num = 0;
-
+        this.url_arr = [];
         clearInterval(this.timer);
 
         return this.getSpiderInfo();
@@ -111,18 +113,18 @@ const spider = {
     },
     spiderMainWork() {
         this.timer = setInterval(() => {
+            this.url_arr = Array.from(new Set(this.url_arr));
             this.url = this.url_arr.shift();
-            (/^https:/g.test(this.url)) ? dealHttpsUrl(this.url,this.url_arr,this.table_name) : dealHttpUrl(this.url,this.url_arr,this.table_name);
+            (/^https:/g.test(this.url)) ? dealHttpUrl(this.url,this.url_arr,this.table_name,https) : dealHttpUrl(this.url,this.url_arr,this.table_name,http);
             this.startnum++;
             if(this.num !== 0){
                 if(this.startnum === this.num)
                     this.endSpider();
             }
-            
-        }, 1000);
+        }, 3000);
     },
     spiderGetUrl() {
-        /^https:/g.test(this.url) ? dealHttpsUrl(this.url,this.url_arr,this.table_name) : dealHttpUrl(this.url,this.url_arr,this.table_name);
+        /^https:/g.test(this.url) ? dealHttpUrl(this.url,this.url_arr,this.table_name,https) : dealHttpUrl(this.url,this.url_arr,this.table_name,http);
         this.startnum++;
     }
 

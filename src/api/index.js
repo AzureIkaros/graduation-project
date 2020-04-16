@@ -3,7 +3,9 @@ import axios from 'axios'
 
 // 搜索页面提交搜搜关键字
 export function search(option){
-    alert(option.inputData)
+    return axios.post('/api/serach',{
+        data:option.inputData
+    })
 }
 
 //管理员登录
