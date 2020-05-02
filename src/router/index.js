@@ -34,6 +34,10 @@ const adminOption = [
                 path:"/admin/console/spider",
                 name:"spider",
                 component:()=>import("../components/admin/show/Spider")
+            },{
+                path:"/admin/console/tablemanage",
+                name:"tablemanage",
+                component:()=>import("../components/admin/show/TableManage")
             }
         ]
     }
@@ -62,6 +66,10 @@ const routes = [
     component:()=>import("../views/AdminOption"),
     redirect:{name:'console'},
     children:adminOption
+  },{
+      path:'/result',
+      name:"result",
+      component:()=>import('../views/Result')
   }
 ]
 
@@ -69,6 +77,26 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to,from,next)=>{
+    //serach,result,login
+    // console.log(to);
+    // console.log(from)
+    if(localStorage.getItem("token")){
+        next()
+    }else{
+        switch(to.name){
+            case "search":
+            case "result":
+            case "login":
+                next();
+                break;
+            default:
+                next({name:"login"})
+        }
+    }
+    
 })
 
 export default router

@@ -63,6 +63,7 @@ export default {
       if (data.data.error == 0) {
         sessionStorage.setItem("username",this.username);
         alert("登录成功,1s秒后跳转到后台页面");
+        localStorage.setItem("token",data.data.token)
         setTimeout(() => {
           this.$router.push({ path: "/admin/oTable" });
         }, 1000);

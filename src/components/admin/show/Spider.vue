@@ -23,7 +23,12 @@
 </template>
 
 <script>
-import { getSpiderInfo, setSpiderInfo, endSpider, stopSpider } from "../../../api";
+import {
+  getSpiderInfo,
+  setSpiderInfo,
+  endSpider,
+  stopSpider
+} from "../../../api";
 export default {
   data() {
     return {
@@ -36,7 +41,7 @@ export default {
       end_flag: true, //结束按钮
       state_flag: 0, //当前状态信息
       radio_flag: false,
-      type_flag:true,
+      type_flag: true,
 
       radio: "noLimit",
       num: 0,
@@ -50,6 +55,10 @@ export default {
   },
   async created() {
     let result = await getSpiderInfo();
+    if (result.data.error === 5) {
+      this.$router.push({ name: "login" });
+      return;
+    }
     let data = result.data;
 
     this.url = data.url;
@@ -61,7 +70,6 @@ export default {
     this.end_flag = data.end_flag;
     this.state_flag = data.state_flag;
     this.radio_flag = data.radio_flag;
-
   },
   computed: {
     getStateFlag() {
@@ -78,11 +86,11 @@ export default {
         }
       };
     },
-    getType(){
-        return this.type_flag ? "warning" : "info";
+    getType() {
+      return this.type_flag ? "warning" : "info";
     },
-    getStopTitle(){
-        return this.type_flag ? "暂停" : "继续";
+    getStopTitle() {
+      return this.type_flag ? "暂停" : "继续";
     },
     getStartFlag() {
       return (
@@ -124,25 +132,36 @@ export default {
           table_name: this.table_name,
           num: this.num_can_use ? 0 : this.num
         });
-        if(result.data.error == 0){
-            window.history.go();
-        }else if(result.data.error == 2){
-            alert("服务器错误,请尽快联系管理员")
-        }else{
-            alert("您输入的表名已存在,请重新输入");
+        if (result.data.error === 5) {
+          this.$router.push({ name: "login" });
+          return;
         }
-        
+        if (result.data.error == 0) {
+          window.history.go();
+        } else if (result.data.error == 2) {
+          alert("服务器错误,请尽快联系管理员");
+        } else {
+          alert("您输入的表名已存在,请重新输入");
+        }
       }
     },
     stop() {
-        if(confirm(`是否${this.type_flag ? "暂停" : "继续"}`)){
-            this.type_flag = !this.type_flag;
-            stopSpider();
+      if (confirm(`是否${this.type_flag ? "暂停" : "继续"}`)) {
+        this.type_flag = !this.type_flag;
+        let result = stopSpider();
+        if (result.data.error === 5) {
+          this.$router.push({ name: "login" });
+          return;
         }
+      }
     },
     end() {
       if (confirm("你确定要结束吗")) {
-        endSpider();
+        let result = endSpider();
+        if (result.data.error === 5) {
+          this.$router.push({ name: "login" });
+          return;
+        }
         window.history.go();
       }
     }

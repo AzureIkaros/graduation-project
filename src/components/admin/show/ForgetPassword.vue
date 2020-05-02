@@ -75,7 +75,7 @@ export default {
       let lowReg = /[a-z]/g;
       let upReg = /[A-Z]/g;
       let other = /[\W || _]/g;
-      
+
       numReg.test(this.newPassWdFir) &&
       lowReg.test(this.newPassWdFir) &&
       upReg.test(this.newPassWdFir) &&
@@ -84,24 +84,28 @@ export default {
         ? (this.flagOne = false)
         : (this.flagOne = true);
     },
-    async pushPW(){
-        let option = {
-            username:sessionStorage.getItem("username"),
-            oldPassWd:this.oldPassWd,
-            newPassWd:this.newPassWdSec
-        };
-        if(confirm("是否确定修改密码")){
-            let result = await pushPassWD(option);
-            if(result.data.error == 0){
-                alert("修改成功");
-            }else if(result.data.error == 1){
-                alert("原密码错误");
-            }else if(result.data.error == 2){
-                alert("密码修改失败,请联系管理员");
-            }else{
-                alert("其他错误,请联系管理员");
-            }
+    async pushPW() {
+      let option = {
+        username: sessionStorage.getItem("username"),
+        oldPassWd: this.oldPassWd,
+        newPassWd: this.newPassWdSec
+      };
+      if (confirm("是否确定修改密码")) {
+        let result = await pushPassWD(option);
+        if (result.data.error === 5) {
+          this.$router.push({ name: "login" });
+          return;
         }
+        if (result.data.error == 0) {
+          alert("修改成功");
+        } else if (result.data.error == 1) {
+          alert("原密码错误");
+        } else if (result.data.error == 2) {
+          alert("密码修改失败,请联系管理员");
+        } else {
+          alert("其他错误,请联系管理员");
+        }
+      }
     }
   }
 };

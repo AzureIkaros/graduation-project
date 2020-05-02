@@ -6,9 +6,12 @@
           <router-link to="/admin/console/spider" active-class="active">爬虫功能</router-link>
         </el-menu-item>
         <el-menu-item index="2">
-          <router-link to="/admin/console/forgetPassword" active-class="active">忘记密码</router-link>
+          <router-link to="/admin/console/TableManage" active-class="active">表管理</router-link>
         </el-menu-item>
         <el-menu-item index="3">
+          <router-link to="/admin/console/forgetPassword" active-class="active">忘记密码</router-link>
+        </el-menu-item>
+        <el-menu-item index="4">
           <p @click="logout">退出</p>
         </el-menu-item>
       </el-menu>
@@ -21,15 +24,15 @@
 
 <script>
 export default {
-    methods: {
-        logout(){
-            if(confirm("确定退出吗")){
-                window.sessionStorage.clear();
-                console.log(this)
-                this.$router.push({name:"admin"});
-            }
-        }
-    },
+  methods: {
+    logout() {
+      if (confirm("确定退出吗")) {
+        window.sessionStorage.clear();
+        localStorage.removeItem("token");
+        this.$router.push({ name: "admin" });
+      }
+    }
+  }
 };
 </script>
 
@@ -54,9 +57,9 @@ section {
     height: 100%;
     display: inline-block;
   }
-  p{
-      width: 100%;
-      height: 100%;
+  p {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

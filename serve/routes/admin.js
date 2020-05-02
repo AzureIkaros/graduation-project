@@ -4,6 +4,7 @@ var router = express.Router();
 const getCode = require("../utils");
 const connection = require("../utils/mysql");
 const passWdChange = require('../utils/passWdChange')
+const { encryptToken,checkToken } = require("../utils/token");
 
 
 let code = "";
@@ -11,7 +12,6 @@ let code = "";
 router.post('/api/adminLogin', (req, res, next) => {
 
     let data = req.body;
-
     connection.query(`select * from admin where username = '${data.username}'`, (error, results, fields) => {
         if (error) {
             console.log(error);
@@ -29,7 +29,7 @@ router.post('/api/adminLogin', (req, res, next) => {
             return
         }else if (data.username == results[0].username && passWdChange(data.password) == results[0].password && data.code.toUpperCase() == code.toUpperCase()) {
             //验证正确
-            res.json({ status: 0, error: 0 });
+            res.json({ status: 0, error: 0 ,token:encryptToken({name:data.username,admin:true})});
         } else if (data.code.toUpperCase() != code.toUpperCase()) {
             //验证码错误
             code = getCode();
@@ -56,6 +56,8 @@ router.get('/api/getCode', (req, res, next) => {
 //密码修改
 router.post('/api/pushPassWD',(req,res,next)=>{
     let data = req.body;
+    if(!checkToken(data.token))
+        return;
     connection.query(`select  * from admin where username = '${data.username}'`,(err,results,fields)=>{
         if(err){
             console.log(err);

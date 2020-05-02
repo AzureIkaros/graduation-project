@@ -121,7 +121,7 @@ const spider = {
                 if(this.startnum === this.num)
                     this.endSpider();
             }
-        }, 3000);
+        }, 5000);
     },
     spiderGetUrl() {
         /^https:/g.test(this.url) ? dealHttpUrl(this.url,this.url_arr,this.table_name,https) : dealHttpUrl(this.url,this.url_arr,this.table_name,http);

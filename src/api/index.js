@@ -1,5 +1,8 @@
 import axios from 'axios'
 
+const post = (url,option)=>{
+    return axios.post(url,{...option,token:localStorage.getItem("token")});
+}
 
 // 搜索页面提交搜搜关键字
 export function search(option){
@@ -10,7 +13,7 @@ export function search(option){
 
 //管理员登录
 export function adminLogin(option){
-    return axios.post('/api/adminLogin',{
+    return post('/api/adminLogin',{
         username:option.username,
         password:option.password,
         code:option.code
@@ -25,7 +28,7 @@ export function getCode(){
 
 //密码修改
 export function pushPassWD(option){
-    return axios.post('/api/pushPassWD',{
+    return post('/api/pushPassWD',{
         username:option.username,
         oldPassWd:option.oldPassWd,
         newPassWd:option.newPassWd
@@ -34,23 +37,34 @@ export function pushPassWD(option){
 
 //爬虫信息获取
 export function getSpiderInfo(){
-    return axios.get('/api/getSpiderInfo')
+    return post('/api/getSpiderInfo')
 }
 
 //爬虫信息的提交
 export function setSpiderInfo(option){
-    return axios.post('/api/setSpiderInfo',option);
+    return post('/api/setSpiderInfo',option);
 }
 
 //爬虫功能暂停和开始
 export function stopSpider(){
-    return axios.post('/api/stopSpider')
+    return post('/api/stopSpider');
 }
 
 //爬虫功能结束
 export function endSpider(){
-    return axios.get('/api/endSpider')
+    return post('/api/endSpider');
 }
+
+//获取表
+export function getTable(){
+    return post("/api/getTable");
+}
+
+//删除表
+export function deleteTable(option){
+    return post("/api/deleteTable",option);
+}
+
 
 
 

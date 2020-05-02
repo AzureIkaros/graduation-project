@@ -17,12 +17,13 @@ export default {
         }
     },
     methods: {
-        submit(){
+        async submit(){
             if(this.inputData == ""){
                 return;
             }
             let option = {  inputData:this.inputData };
-            search(option);
+            this.$router.push({name:"result",params:await search(option)});
+            window.sessionStorage.setItem("key",this.inputData);
         }
     },
 };
