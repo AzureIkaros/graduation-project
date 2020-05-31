@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
 const connection = require("./mysql");
+const superagent = require("superagent");
 
 let writeDb = (url, title, table_name, text) => {
     connection.query(`insert into ${table_name} (url,title,clickNum,table_name,text) values('${url}','${title}',0,'${table_name}','${text}')`, (error, result) => {
@@ -10,39 +11,36 @@ let writeDb = (url, title, table_name, text) => {
 }
 
 
-let dealHttpUrl = (url, url_arr, table_name, serve) => {
-    console.log("url有了")
-    serve.get(url, (res) => {
-        let chunks = [];
-        let size = 0;
-        res.on('data', (chunk) => {
-            chunks.push(chunk);
-            size += chunk.length;
-        });
+let dealHttpUrl = (url, url_arr, table_name) => {
+    try {
+        superagent.get(url)
+            .end((err, sres) => {
+                // 常规的错误处理
+                console.log("error")
 
-        res.on("end", () => {
-            let data = Buffer.concat(chunks, size);
-            let html = data.toString();
-            let $ = cheerio.load(html);
-
-            writeDb(url, $("title").text(), table_name, $("body").text().replace(/[\n,\s,','']/g, ""));
-
-            $("a").each((index, value) => {
-                let _url = $(value).attr("href");
-                _url = /^#/g.test(_url) ? '/' + _url : _url;
-                if (_url != undefined) {
-                    if (/^http:\/\//g.test(_url) || /^https:\/\//g.test(_url)) {
-                        url_arr.push(_url);
-                    } else {
-                        url_arr.push(url + _url);
-                    }
+                try {
+                    var $ = cheerio.load(sres.text);
+                    writeDb(url, $("title").text(), table_name, $("body").text().replace(/[\n,\s,','']/g, ""));
+                    $("a").each((index, value) => {
+                        let _url = $(value).attr("href");
+                        _url = /^#/g.test(_url) ? '/' + _url : _url;
+                        if (_url != undefined) {
+                            if (/^http:\/\//g.test(_url) || /^https:\/\//g.test(_url)) {
+                                url_arr.push(_url);
+                            } else {
+                                url_arr.push(url + _url);
+                            }
+                        }
+                    })
+                } catch (err) {
+                    console.log("error")
                 }
-            })
-            console.log("arr添加了")
-        }).on('error', (e) => {
-            console.log("内部出现错误")
-        })
-    })
+
+            });
+    }catch(e){
+        console.log("error")
+    }
+
 }
 
 module.exports = {

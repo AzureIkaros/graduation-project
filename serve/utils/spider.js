@@ -33,9 +33,15 @@ const spider = {
                             error: 2
                         })
                     } else {
-                        connection.query(`create table ${info.table_name}(id int primary key auto_increment,url varchar(1000),title varchar(256),clickNum int,table_name varchar(256),text longtext,fulltext index full_text(text) with parser ngram)`, (error, result) => {
+                        connection.query(`create table ${info.table_name}(id int primary key auto_increment,
+                            url varchar(1000),
+                            title varchar(256),
+                            clickNum int,
+                            table_name varchar(256),
+                            text longtext,
+                            fulltext index full_text(text) with parser ngram)`, (error, result) => {
                             if (error) {
-                                console.log("createTable:" + error)
+                                console.log("createTableError")
                                 res.json({
                                     status: 0,
                                     error: 2
@@ -114,17 +120,23 @@ const spider = {
     spiderMainWork() {
         this.timer = setInterval(() => {
             this.url_arr = Array.from(new Set(this.url_arr));
+            if(this.url_arr.length === 0){
+                clearInterval(this.timer);
+                console.log("没数据了")
+                this.endSpider()
+                return;
+            }
             this.url = this.url_arr.shift();
-            (/^https:/g.test(this.url)) ? dealHttpUrl(this.url,this.url_arr,this.table_name,https) : dealHttpUrl(this.url,this.url_arr,this.table_name,http);
+            dealHttpUrl(this.url,this.url_arr,this.table_name)
             this.startnum++;
             if(this.num !== 0){
                 if(this.startnum === this.num)
                     this.endSpider();
             }
-        }, 5000);
+        }, 1000);
     },
     spiderGetUrl() {
-        /^https:/g.test(this.url) ? dealHttpUrl(this.url,this.url_arr,this.table_name,https) : dealHttpUrl(this.url,this.url_arr,this.table_name,http);
+        dealHttpUrl(this.url,this.url_arr,this.table_name)
         this.startnum++;
     }
 

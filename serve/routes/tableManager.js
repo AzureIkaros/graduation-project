@@ -49,4 +49,39 @@ router.post('/api/deleteTable',(req,res,next)=>{
     })
 })
 
+
+router.post('/api/getTableInfo',(req,res,next)=>{
+    checkToken(req.body.token, res, () => {
+        let id = req.body.id;
+        conn.query(`select * from tableset where id = '${id}'`,(error,result)=>{
+            conn.query(`select * from ${result[0].table_name}`,(error,list)=>{
+                res.json({
+                    status:0,
+                    data:list
+                })
+            })
+        })
+    })
+})
+
+
+router.post('/api/delTableInfo',(req,res,next)=>{
+    checkToken(req.body.token, res, () => {
+        conn.query(`delete from ${req.body.table_name} where id = '${req.body.id}'`,(error,result)=>{
+            if(error){
+                res.json({
+                    status:1,
+                    error:1
+                })
+                return;
+            }
+            if(result){
+                res.json({
+                    status:0,
+                    error:0
+                })
+            }
+        })
+    })
+})
 module.exports = router;

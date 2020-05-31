@@ -17,6 +17,7 @@
     "mysql": "^2.18.1"
   },
   "devDependencies": {
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "superagent": "^5.2.2"
   }
 }

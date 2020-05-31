@@ -65,6 +65,19 @@ export function deleteTable(option){
     return post("/api/deleteTable",option);
 }
 
+//点击增加
+export function click(option){
+    return axios.post('/api/click',option);
+}
 
+
+//获取具体的表
+export function getTableInfo(option){
+    return post('/api/getTableInfo',option);
+}
+
+export function delTableInfo(option){
+    return post('/api/delTableInfo',option);
+}
 
 

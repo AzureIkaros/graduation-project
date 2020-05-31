@@ -70,7 +70,12 @@ const routes = [
       path:'/result',
       name:"result",
       component:()=>import('../views/Result')
-  }
+  },
+  {
+    path:"/admin/tableitem",
+    name:"tableitem",
+    component:()=>import("../components/admin/show/TableItem")
+}
 ]
 
 const router = new VueRouter({

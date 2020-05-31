@@ -2,7 +2,7 @@
   <div ref="box">
     <h3 v-if="titleShow">查询到{{resultList.length}}条记录</h3>
     <ul>
-      <li v-for="(item) in currentList" :key="item.id" @click="goTo(item.url)">
+      <li v-for="(item) in currentList" :key="item.id" @click="goTo(item)">
         <h4>{{item.title}}</h4>
         <p>{{item.text}}</p>
       </li>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { search } from "../api";
+import { search, click } from "../api";
 export default {
   data() {
     return {
@@ -55,8 +55,14 @@ export default {
       );
       this.$refs.box.scrollTop = 0;
     },
-    goTo(url) {
-      window.open(url);
+    goTo(item) {
+      click(item)
+        .then(() => {
+          window.open(item.url);
+        })
+        .catch(() => {
+          window.open(item.url);
+        });
     }
   }
 };

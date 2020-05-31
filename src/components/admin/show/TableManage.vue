@@ -1,7 +1,7 @@
 <template>
   <div>
     <template>
-      <el-table :data="tableData" style="width: 100%" highlight-current-row>
+      <el-table :data="tableData" style="width: 100%" highlight-current-row @row-click="rowclick">
         <el-table-column type="index" width="100" />
         <el-table-column prop="table_name" label="表名" width="280"></el-table-column>
         <el-table-column prop="title" label="关键词" width="400"></el-table-column>
@@ -48,6 +48,12 @@ export default {
       }else{
           window.location.reload()
       }
+    },
+    rowclick(row,column,event){
+        if(event.target.tagName === "BUTTON" || event.target.tagName === "SPAN"){
+            return ;
+        }
+        this.$router.push({name:'tableitem',query:{id:row.id}})
     }
   }
 };

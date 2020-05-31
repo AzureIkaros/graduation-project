@@ -46,7 +46,7 @@ section {
   #page {
     width: 85%;
     float: left;
-    height: 100%;
+    height: 90%;
   }
   .active {
     color: #409eff;
