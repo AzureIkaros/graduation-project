@@ -16,8 +16,6 @@ let dealHttpUrl = (url, url_arr, table_name) => {
         superagent.get(url)
             .end((err, sres) => {
                 // 常规的错误处理
-                console.log("error")
-
                 try {
                     var $ = cheerio.load(sres.text);
                     writeDb(url, $("title").text(), table_name, $("body").text().replace(/[\n,\s,','']/g, ""));

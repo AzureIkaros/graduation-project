@@ -12,7 +12,7 @@ router.post("/api/serach", async (req, res, next) => {
         data.tokens.forEach((value) => {
             str += `+${value.token} `
         })
-
+        console.log(`str:${str}`)
         connection.query(`select * from tableset`, (error, result) => {
             arr = result.filter(value => {
                 if (value.table_name === 'admin' || value.table_name === 'tableset') {
@@ -22,7 +22,7 @@ router.post("/api/serach", async (req, res, next) => {
                 }
             })
             arr.forEach((value, index) => {
-                connection.query(`select * from ${value.table_name} where match(text) against('${str}' IN BOOLEAN MODE)`, (error, result) => {
+                connection.query(`select * from ${value.table_name} where match(text) against('${str}')`, (error, result) => {
                     serResult = serResult.concat(result);
                     if (index == arr.length - 1) {
                         serResult.sort((x, y) => {

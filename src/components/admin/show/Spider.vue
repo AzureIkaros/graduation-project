@@ -149,7 +149,7 @@ export default {
       if (confirm(`是否${this.type_flag ? "暂停" : "继续"}`)) {
         this.type_flag = !this.type_flag;
         let result = stopSpider();
-        if (result.data.error === 5) {
+        if (result.data && result.data.error === 5) {
           this.$router.push({ name: "login" });
           return;
         }
@@ -158,11 +158,11 @@ export default {
     end() {
       if (confirm("你确定要结束吗")) {
         let result = endSpider();
-        if (result.data.error === 5) {
+        if (result.data && result.data.error === 5) {
           this.$router.push({ name: "login" });
           return;
         }
-        window.history.go();
+        window.location.reload();
       }
     }
   }

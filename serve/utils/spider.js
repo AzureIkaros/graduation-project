@@ -122,7 +122,6 @@ const spider = {
             this.url_arr = Array.from(new Set(this.url_arr));
             if(this.url_arr.length === 0){
                 clearInterval(this.timer);
-                console.log("没数据了")
                 this.endSpider()
                 return;
             }
